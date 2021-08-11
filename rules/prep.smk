@@ -74,6 +74,19 @@ rule bwa_index:
     wrapper:
         "0.51.3/bio/bwa/index"
 
+rule bwa_mem2_index:
+    input:
+        genome
+    output:
+        genome + ".0123",
+        genome + ".bwt.2bit.64",
+    log:
+        "logs/" + genomename + ".bwa-mem2_index.log"
+    params:
+        prefix=genome
+    wrapper:
+        "0.77.0/bio/bwa-mem2/index"
+
 # Write a dictionary file for the genome.
 # The input file extension is replaced by `dict`, instead of adding to it, so we have to trick
 # around with the output file name here.

@@ -38,8 +38,8 @@ settings:
   merge-paired-end-reads: false
 
   # Select the tool used for read mapping.
-  # Valid values: "bwamem", "bwaaln", "bowtie2"
-  mapping-tool: "bwamem"
+  # Valid values: "bwamem", "bwamem2", "bwaaln", "bowtie2"
+  mapping-tool: "bwamem2"
 
   # After mapping, and before any subsequent steps (deduplication, variant calling etc),
   # appy a filtering step using `samtools view`. If set to `true`,
