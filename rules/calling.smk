@@ -21,7 +21,7 @@ if "restrict-regions" in config["settings"]:
     localrules: compose_regions
 
 if "group-small-contigs" in config["settings"]:
-    rule compose_regions:
+    rule group_contigs:
         input:
             ref=get_fai
         output:
