@@ -20,6 +20,31 @@ if "restrict-regions" in config["settings"]:
     # Rule is not submitted as a job to the cluster.
     localrules: compose_regions
 
+if "group-small-contigs" in config["settings"]:
+    rule compose_regions:
+        input:
+            ref=get_fai
+        output:
+            "called/{contig}.list"
+        log:
+            "logs/groupcontigs/{contig}.log"
+        run:
+            contig0, contig1 = wildcards.contig.split("---")
+            contigs = []
+            with open(ref, "r") as f:
+                for line in f:
+                    contig = line.split("\t")[0].strip()
+                    if contigs or contig == contig0:
+                        contigs.append(contig)
+                    if contig == contig1:
+                        break
+
+            with open(output, "w") as f:
+                f.writelines(f"{c}\n" for c in contigs)
+
+    # Rule is not submitted as a job to the cluster.
+    localrules: compose_regions
+
 # =================================================================================================
 #     Common Helper Functions
 # =================================================================================================
@@ -31,6 +56,32 @@ def get_fai(wildcards):
 
 # contigs in reference genome
 def get_contigs( fai ):
+    small_contig_thresh = config["settings"].get("group-small-contigs")
+    if small_contig_thresh:
+        contigs = []
+        length_sum = 0
+        contig0 = ""
+        with open(fai, "r") as f:
+            for line in f:
+                contig, length_str = line.split("\t")[:2]
+                contig = contig.strip()
+                length = int(length_str.strip())
+
+                if not contig0:
+                    contig0 = contig
+
+                length_sum += length
+
+                if length_sum >= small_contig_thresh:
+                    contigs.append(f"{contig0}---{contig}")
+                    contig0 == ""
+                    length_sum = 0
+
+        if contig0:
+            contigs.append(f"{contig0}---{contig}")
+
+        return contigs
+
     return pd.read_csv( fai, sep='\t', header=None, usecols=[0], squeeze=True, dtype=str )
 
 # =================================================================================================

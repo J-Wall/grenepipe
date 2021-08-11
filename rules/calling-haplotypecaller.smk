@@ -54,7 +54,13 @@ rule call_variants:
         knownidx=config["data"]["reference"]["known-variants"] + ".tbi" if config["data"]["reference"]["known-variants"] else [],
 
         # Further settings for region constraint filter.
-        regions="called/{contig}.regions.bed" if config["settings"].get("restrict-regions") else []
+        regions="called/{contig}.regions.bed" if (
+            config["settings"].get("restrict-regions")
+        ) else (
+            "called/{contig}.list" if (
+                config["settings"].get("group-small-contigs")
+            ) else []
+        )
     output:
         gvcf=protected("called/{sample}.{contig}.g.vcf.gz")
     log:
