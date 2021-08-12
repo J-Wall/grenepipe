@@ -46,7 +46,7 @@ if "group-small-contigs" in config["settings"]:
                     if contig == contig1:
                         break
 
-            with open(output, "w") as f:
+            with open(output[0], "w") as f:
                 f.writelines(f"{c}\n" for c in contigs)
 
     # Rule is not submitted as a job to the cluster.
