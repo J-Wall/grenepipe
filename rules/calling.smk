@@ -1,3 +1,10 @@
+#
+def get_fai(wildcards):
+    # Stop at the snakemake checkpoint first to ensure that the fai file is available.
+    return checkpoints.samtools_faidx.get().output[0]
+
+    # return config["data"]["reference"]["genome"] + ".fai"
+
 # =================================================================================================
 #     Restrict Regions
 # =================================================================================================
@@ -31,7 +38,7 @@ if "group-small-contigs" in config["settings"]:
         run:
             contig0, contig1 = wildcards.contig.split("---")
             contigs = []
-            with open(ref, "r") as f:
+            with open(input.ref, "r") as f:
                 for line in f:
                     contig = line.split("\t")[0].strip()
                     if contigs or contig == contig0:
@@ -48,11 +55,6 @@ if "group-small-contigs" in config["settings"]:
 # =================================================================================================
 #     Common Helper Functions
 # =================================================================================================
-
-def get_fai(wildcards):
-    # Stop at the snakemake checkpoint first to ensure that the fai file is available.
-    return checkpoints.samtools_faidx.get().output[0]
-    # return config["data"]["reference"]["genome"] + ".fai"
 
 # contigs in reference genome
 def get_contigs( fai ):
