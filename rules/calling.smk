@@ -76,7 +76,7 @@ def get_contigs( fai ):
 
                 if length_sum >= small_contig_thresh:
                     contigs.append(f"{contig0}---{contig}")
-                    contig0 == ""
+                    contig0 = ""
                     length_sum = 0
 
         if contig0:
