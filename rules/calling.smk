@@ -32,7 +32,7 @@ if "group-small-contigs" in config["settings"]:
         input:
             ref=get_fai
         output:
-            "called/{contig}.list"
+            "contiggroups/{contig}.list"
         log:
             "logs/groupcontigs/{contig}.log"
         run:

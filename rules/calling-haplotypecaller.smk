@@ -57,7 +57,7 @@ rule call_variants:
         regions="called/{contig}.regions.bed" if (
             config["settings"].get("restrict-regions")
         ) else (
-            "called/{contig}.list" if (
+            "contiggroups/{contig}.list" if (
                 config["settings"].get("group-small-contigs")
             ) else []
         )
